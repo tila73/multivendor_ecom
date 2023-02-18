@@ -4,7 +4,14 @@ import { Routes, Route } from "react-router-dom";
 // Website
 import Home from "./components/Home";
 import Shop from "./components/Shop";
+import MainCategory from "./components/MainCategory";
+import Category from "./components/Category";
+import SubCategory from "./components/SubCategory";
+import ProductDetail from "./components/ProductDetail";
+import Brand from "./components/Brand";
+import BrandProduct from "./components/BrandProduct";
 import Sell from "./components/Sell";
+import Cart from "./components/Cart";
 import OrderSuccess from "./components/OrderSuccess";
 import OrderFailure from "./components/OrderFailure";
 
@@ -37,7 +44,15 @@ function App() {
         {/* Website routes */}
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
+        {/* <Route path="/shop/dog" element={<MainCategory />} /> */}
+        <Route path="/:maincategory_slug" element={<MainCategory />} />
+        <Route path="/:maincategory_slug/:category_slug" element={<Category />} />
+        <Route path="/:maincategory_slug/:category_slug/:subcategory_slug" element={<SubCategory />} />
+        <Route path="/:maincategory_slug/:category_slug/:subcategory_slug/:product_slug" element={<ProductDetail />} />
+        <Route path="/brands" element={<Brand />} />
+        <Route path="/brands/:brand_slug" element={<BrandProduct />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/order/success" element={<OrderSuccess />} />
         <Route path="/order/failure" element={<OrderFailure />} />
 

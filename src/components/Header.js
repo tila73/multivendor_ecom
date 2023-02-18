@@ -28,7 +28,7 @@ function Header() {
 
   return (
     <header className="bg-purple-300">
-      <div className="mx-20 py-3">
+      <div className="mx-16 py-3">
         {/* Top nav */}
         <div className="flex items-center p-1 flex-grow py-2">
           {/* Logo */}
@@ -95,10 +95,10 @@ function Header() {
             </div>
             </Link>
 
-            <div className="cursor-pointer">
+            <Link to="/cart">
               <ShoppingCartIcon className="h-18" />
               <a className="hidden md:inline">Cart</a>
-            </div>
+            </Link>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ function Header() {
             Shop
             <ChevronDownIcon className="h-4" />
           </Link>
-          <a className="cursor-pointer">Brands</a>
+          <Link to="/brands" className="cursor-pointer">Brands</Link>
           <Link to="/sell">Sell</Link>
           <a className="cursor-pointer  flex items-center">
             Customer Service

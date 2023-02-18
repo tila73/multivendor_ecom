@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+// import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { Link } from "react-router-dom";
-import pets from "../assets/pets.jpg";
+// import pets from "../assets/pets.jpg";
+import banner from "../assets/3.png";
 import Footer from "./Footer";
 import reactlogo from "../logo.svg";
 import Header from "./Header";
@@ -37,22 +38,23 @@ function Home() {
       });
   }
 
-  const slideLeft = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft - 500;
-  };
+  // const slideLeft = () => {
+  //   var slider = document.getElementById("slider");
+  //   slider.scrollLeft = slider.scrollLeft - 500;
+  // };
 
-  const slideRight = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft + 500;
-  };
+  // const slideRight = () => {
+  //   var slider = document.getElementById("slider");
+  //   slider.scrollLeft = slider.scrollLeft + 500;
+  // };
 
   return (
     <div>
       <Header />
-      <div>
-        <img className="w-full" src={pets} alt="pets" />
-      </div>
+      <a href="#products-by-pet">
+        <img className="w-full" src={banner} alt="pets" />
+      </a>
+      {/* <div><Link to="/dog" href="#">Dog</Link></div> */}
       <div className="my-8 mx-20">
         <h1 className="text-2xl font-bold">Best Selling Products</h1>
         {/* <div className="flex justify-center gap-x-10 pt-6"> */}
@@ -114,15 +116,15 @@ function Home() {
         </div>
       </div>
 
-      {/* Shop By Pet */}
+      {/* Shop Products By Pet */}
       <div className="my-10">
-        <h1 className="text-2xl font-bold ml-20">Shop By Pet</h1>
+        <h1 className="text-2xl font-bold ml-20" id="products-by-pet">Shop Products By Pet</h1>
         <div className="relative flex items-center mx-16">
-          <MdChevronLeft
+          {/* <MdChevronLeft
             className="opacity-50 cursor-pointer hover:opacity-100"
             onClick={slideLeft}
             size={40}
-          />
+          /> */}
           <div
             id="slider"
             className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide"
@@ -131,7 +133,7 @@ function Home() {
               <SingleMainCategory
                 key={main_category.id}
                 main_category={main_category}
-              />
+              /> 
             ))} */}
             {error ? (
               <div>Error: {error}</div>
@@ -148,11 +150,11 @@ function Home() {
               <div>No data found</div>
             )}
           </div>
-          <MdChevronRight
+          {/* <MdChevronRight
             className="opacity-50 cursor-pointer hover:opacity-100"
             onClick={slideRight}
             size={40}
-          />
+          /> */}
         </div>
       </div>
 
