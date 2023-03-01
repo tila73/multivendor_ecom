@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { Link } from "react-router-dom";
 // import pets from "../assets/pets.jpg";
-import banner from "../assets/3.png";
+import banner from "../assets/2.png";
 import Footer from "./Footer";
 import reactlogo from "../logo.svg";
 import Header from "./Header";

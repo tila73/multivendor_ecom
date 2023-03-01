@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import sellerlogo from "../../assets/sellerlogo.svg";
 
 function SellerLogin() {
+  const [loginFormData, setLoginFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const inputHandler = (event) => {
+    setLoginFormData({
+      ...loginFormData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  // console.log(loginFormData);
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('username', loginFormData.username);
+    formData.append('password', loginFormData.password);
+    console.log(formData);
+    // console.dir(formData)
+  };
+
   return (
     <div className="h-screen flex flex-col items-center">
       <div>
@@ -26,24 +49,24 @@ function SellerLogin() {
       >
         <form
           className="max-w-[400px] w-full mx-auto bg-white p-4"
-          id="loginForm"
+          id="loginForm" onSubmit={submitHandler}
         >
           <h2 className="text-xl font-medium pb-4">
             Get started selling on Pampered Pets
           </h2>
           <div className="flex flex-col py-2">
             <label>Username</label>
-            <input className="border p-2" type="text" name="username" />
+            <input className="border p-2" type="text" name="username" value={loginFormData.username} onChange={inputHandler} />
           </div>
           <div className="flex flex-col py-2">
             <label>Password</label>
-            <input className="border p-2" type="password" name="password" />
+            <input className="border p-2" type="password" name="password" value={loginFormData.password} onChange={inputHandler} />
           </div>
-          <Link to="/seller/dashboard">
+          {/* <Link to="/seller/dashboard"> */}
             <button className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white">
               Sign in
             </button>
-          </Link>
+          {/* </Link> */}
           <p className="text-center">New to Pampered Pets?</p>
           <Link to="/seller/register">
             <button className="border w-full my-3 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white">

@@ -1,19 +1,21 @@
+import React from 'react'
 import { useState } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import reactlogo from "../logo.svg";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      image: "product1.jpg",
+      image: reactlogo,
       description: "Product 1 description",
       price: 10,
       quantity: 1,
     },
     {
       id: 2,
-      image: "product2.jpg",
+      image: reactlogo,
       description: "Product 2 description",
       price: 20,
       quantity: 2,
@@ -32,7 +34,7 @@ function Cart() {
     <div>
       <Header />
       <div className="flex flex-wrap justify-center bg-gray-100 p-6">
-        <div className="w-full md:w-2/3 lg:w-1/2 px-4 shadow-lg rounded-lg bg-white">
+        <div className="w-full md:w-2/3 lg:w-2/3 px-4 shadow-lg rounded-lg bg-white">
           <h2 className="text-2xl font-bold mb-2">Shopping cart</h2>
           <div className="overflow-hidden p-4">
             {cartItems.map((item) => (
@@ -51,7 +53,10 @@ function Cart() {
                   </h3>
                   <p className="text-gray-600">${item.price}</p>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mt-4">
+                
+
+                
                   <input
                     type="number"
                     min="1"
@@ -69,7 +74,7 @@ function Cart() {
             ))}
           </div>
         </div>
-        <div className="w-full md:w-2/3 lg:w-1/2 px-4 shadow-md rounded-lg bg-white">
+        <div className="w-full md:w-2/3 lg:w-1/3 px-4 shadow-md rounded-lg bg-white">
           <h2 className="text-2xl font-bold mb-2">Subtotal</h2>
           <div className="overflow-hidden p-4">
             <div className="flex items-center py-3">

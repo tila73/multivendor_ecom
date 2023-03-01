@@ -1,52 +1,74 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.svg";
-// import { useRegisterUserMutation } from "../../services/userAuthApi";
+import axios from "axios";
 
 function Register() {
-  const [error, setError] = useState({
-    status: false,
-    msg: "",
-    type: "",
-  });
+  const baseUrl = "http://127.0.0.1:8000/api/";
+  // const [formError, setFormError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
-    // const [registerUser, { isLoading }]= useRegisterUserMutation()
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const actualData = {
-      name: data.get("name"),
-      email: data.get("email"),
-      address: data.get("address"),
-      password: data.get("password"),
-      confirmPassword: data.get("confirmPassword"),
-    };
-    if (
-      actualData.name &&
-      actualData.email &&
-      actualData.address &&
-      actualData.password
-    ) {
-      if (actualData.password === actualData.confirmPassword) {
-        console.log(actualData);
-        document.getElementById("registrationForm").reset();
-        // setError({
-        //   status: true,
-        //   msg: "Registration successful",
-        //   type: "success",
-        // });
-        navigate("/");
-      } else {
-        setError({
-          status: true,
-          msg: "Password and confirm password doesn't match",
-          type: "error",
-        });
-      }
-    } else {
-      setError({ status: true, msg: "All fields are required", type: "error" });
-    }
+
+  const [registerFormData, setRegisterFormData] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    mobile: "",
+    password: "",
+  });
+
+  const inputHandler = (event) => {
+    setRegisterFormData({
+      ...registerFormData,
+      [event.target.name]: event.target.value,
+    });
   };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("first_name", registerFormData.first_name);
+    formData.append("last_name", registerFormData.last_name);
+    formData.append("username", registerFormData.username);
+    formData.append("email", registerFormData.email);
+    formData.append("mobile", registerFormData.mobile);
+    formData.append("password", registerFormData.password);
+
+    axios
+      .post(baseUrl + "customer/register/", formData)
+      .then(function (response) {
+        if (response.data.bool === false) {
+          // setFormError(true);
+          setErrorMsg(response.data.msg);
+          setSuccessMsg('');
+        } else {
+          setRegisterFormData({
+            first_name: "",
+            last_name: "",
+            username: "",
+            email: "",
+            mobile: "",
+            password: "",
+          });
+          setErrorMsg('');
+          setSuccessMsg(response.data.msg);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const buttonEnable =
+    registerFormData.first_name !== "" &&
+    registerFormData.last_name !== "" &&
+    registerFormData.username !== "" &&
+    registerFormData.email !== "" &&
+    registerFormData.mobile !== "" &&
+    registerFormData.password !== "";
+
   return (
     <div className="h-screen flex flex-col items-center">
       <Link to="/">
@@ -61,59 +83,83 @@ function Register() {
         <form
           id="registrationForm"
           className="max-w-[400px] w-full mx-auto bg-white p-4"
-          onSubmit={handleSubmit}
+          onSubmit={submitHandler}
         >
           <h2 className="text-2xl font-bold pb-4">Create Account</h2>
           <div className="flex flex-col py-2">
-            <label>Full Name</label>
-            <input className="border p-2" name="name" type="text" />
+            <label>First Name</label>
+            <input
+              className="border p-2"
+              name="first_name"
+              type="text"
+              onChange={inputHandler}
+              value={registerFormData.first_name}
+            />
+          </div>
+          <div className="flex flex-col py-2">
+            <label>Last Name</label>
+            <input
+              className="border p-2"
+              name="last_name"
+              type="text"
+              onChange={inputHandler}
+              value={registerFormData.last_name}
+            />
+          </div>
+          <div className="flex flex-col py-2">
+            <label>Username</label>
+            <input
+              className="border p-2"
+              name="username"
+              type="text"
+              onChange={inputHandler}
+              value={registerFormData.username}
+            />
           </div>
           <div className="flex flex-col py-2">
             <label>Email</label>
-            <input className="border p-2" name="email" type="email" />
+            <input
+              className="border p-2"
+              name="email"
+              type="email"
+              onChange={inputHandler}
+              value={registerFormData.email}
+            />
           </div>
           <div className="flex flex-col py-2">
-            <label>Address</label>
-            <input className="border p-2" name="address" type="text" />
+            <label>Mobile</label>
+            <input
+              className="border p-2"
+              name="mobile"
+              type="number"
+              onChange={inputHandler}
+              value={registerFormData.mobile}
+            />
           </div>
           <div className="flex flex-col py-2">
             <label>Password</label>
-            <input className="border p-2" name="password" type="password" />
+            <input
+              className="border p-2"
+              name="password"
+              type="password"
+              onChange={inputHandler}
+              value={registerFormData.password}
+            />
           </div>
-          <div className="flex flex-col py-2">
+          {/* <div className="flex flex-col py-2">
             <label>Confirm Password</label>
             <input
               className="border p-2"
               name="confirmPassword"
               type="password"
             />
-          </div>
-          {error.status ? (
-            <div
-              class="mb-3 text-base text-red-700 inline-flex items-center w-full"
-              role="alert"
-            >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="info-circle"
-                class="w-4 h-4 mr-2 fill-current"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                ></path>
-              </svg>
-              {error.msg}
-            </div>
-          ) : (
-            ""
-          )}
-          <button className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white">
+          </div> */}
+          {successMsg && <p className="text-green-600">{successMsg}</p>}
+          {errorMsg && <p className="text-red-600">{errorMsg}</p>}
+          <button
+            disabled={!buttonEnable}
+            className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white"
+          >
             Create account
           </button>
           <p className="text-center">Already have an account?</p>

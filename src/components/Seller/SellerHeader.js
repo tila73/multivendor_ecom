@@ -5,7 +5,7 @@ import sellerlogo from "../../assets/sellerlogo.svg";
 function SellerHeader() {
   return (
     <header className="bg-purple-300">
-      <div class="flex flex-wrap justify-between mx-10 sm:mx-20 py-4">
+      <div className="flex flex-wrap justify-between mx-10 sm:mx-20 py-4">
         <img
           src={sellerlogo}
           alt="seller central logo"

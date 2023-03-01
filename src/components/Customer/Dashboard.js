@@ -10,22 +10,22 @@ function Dashboard() {
       <Header />
       <div className="flex flex-col pt-8 px-12 sm:px-24 pb-20 lg:flex-row">
         <Sidebar />
-        <div class="lg:pl-10">
+        <div className="lg:pl-10">
           <div className="flex flex-col md:flex-row">
-            <div class="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center mr-2">
-              <Link class="text-gray-900 text-xl font-medium mb-2 hover:underline">
+            <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center mr-2">
+              <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Orders
               </Link>
               <p>123</p>
             </div>
-            <div class="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center  mr-2">
-              <Link class="text-gray-900 text-xl font-medium mb-2 hover:underline">
+            <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center  mr-2">
+              <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Wishlist
               </Link>
               <p>123</p>
             </div>
-            <div class="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center  mr-2">
-              <Link class="text-gray-900 text-xl font-medium mb-2 hover:underline">
+            <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center  mr-2">
+              <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Addresses
               </Link>
               <p>3</p>

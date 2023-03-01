@@ -1,4 +1,4 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.svg";
 import {
   MagnifyingGlassIcon,
@@ -7,24 +7,30 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext, CartContext } from "../Context";
 
 function Header() {
-  // const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const handleClick = () => {
-  //   setDropdownOpen(!dropdownOpen);
-  // };
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownOpen && !event.target.closest(".dropdown")) {
-  //       setDropdownOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("click", handleClickOutside);
+  const userContext = useContext(UserContext);
+  console.log(userContext) //comment this later
+  const {cartItem, setCartItem}=useContext(CartContext);
+  
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest(".dropdown")) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
 
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside);
-  //   };
-  // }, [dropdownOpen]);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [dropdownOpen]);
 
   return (
     <header className="bg-purple-300">
@@ -33,16 +39,16 @@ function Header() {
         <div className="flex items-center p-1 flex-grow py-2">
           {/* Logo */}
           <div className="mt-2 flex items-center flex-grow sm:flex-grow-0">
-          <Link to='/'>
-          <img
-              className="mr-16"
-              src={logo}
-              alt="logo"
-              width={200}
-              height={40}
-              //objectFit="contain"
-            />
-          </Link>
+            <Link to="/">
+              <img
+                className="mr-16"
+                src={logo}
+                alt="logo"
+                width={200}
+                height={40}
+                //objectFit="contain"
+              />
+            </Link>
           </div>
 
           {/* Search */}
@@ -57,7 +63,8 @@ function Header() {
 
           {/* Right */}
           <div className="flex items-center text-sm font-bold whitespace-nowrap">
-            {/* <div
+            {/* Dropdown code from here */}
+            <div
               className="cursor-pointer mx-16 dropdown"
               onClick={handleClick}
             >
@@ -68,24 +75,36 @@ function Header() {
               <a className="hidden md:inline">Account</a>
               {dropdownOpen && (
                 <div className="bg-white rounded-lg shadow-md py-2">
-                  <Link to="/customer/login" className="block px-4 py-2">
-                    Sign In
-                  </Link>
-                  <Link to="/customer/register" className="block px-4 py-2">
-                    Create Account
-                  </Link>
-                  <hr className="border-gray-300 my-1" />
-                  <Link to="/customer/dashboard" className="block px-4 py-2">
-                    Dashboard
-                  </Link>
-                  <Link to="/customer/login" className="block px-4 py-2">
-                    Sign out
-                  </Link>
+                  {userContext !== "true" && (
+                    <>
+                      <Link to="/customer/login" className="block px-4 py-2">
+                        Sign In
+                      </Link>
+                      <Link to="/customer/register" className="block px-4 py-2">
+                        Create Account
+                      </Link>
+                    </>
+                  )}
+                  {userContext === "true" && (
+                      <>
+                        {/* <hr className="border-gray-300 my-1" /> */}
+                        <Link
+                          to="/customer/dashboard"
+                          className="block px-4 py-2"
+                        >
+                          Dashboard
+                        </Link>
+                        <Link to="/customer/logout" className="block px-4 py-2">
+                          Sign out
+                        </Link>
+                      </>
+                    )}
                 </div>
               )}
-            </div> */}
+            </div>
+            {/* To here */}
 
-            <Link to='/customer/login'>
+            {/* <Link to='/customer/login'>
             <div className="cursor-pointer mx-16">
               <div className="flex items-center">
                 <UserCircleIcon className="h-7" />
@@ -93,7 +112,7 @@ function Header() {
               </div>
               <a className="hidden md:inline">Account</a>
             </div>
-            </Link>
+            </Link> */}
 
             <Link to="/cart">
               <ShoppingCartIcon className="h-18" />
@@ -108,7 +127,9 @@ function Header() {
             Shop
             <ChevronDownIcon className="h-4" />
           </Link>
-          <Link to="/brands" className="cursor-pointer">Brands</Link>
+          <Link to="/brands" className="cursor-pointer">
+            Brands
+          </Link>
           <Link to="/sell">Sell</Link>
           <a className="cursor-pointer  flex items-center">
             Customer Service

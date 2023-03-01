@@ -1,32 +1,68 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "../../assets/logo.svg";
-//import {useLoginUserMutation} from "./services/userAuthApi";
 
 function Login() {
-  const [error, setError] = useState({
-    status: false,
-    msg: "",
-    type: "",
+  const baseUrl = "http://127.0.0.1:8000/api/";
+  const [formError, setFormError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  // const navigate = useNavigate();
+
+  const [loginFormData, setLoginFormData] = useState({
+    username: "",
+    password: "",
   });
-  const navigate = useNavigate();
-  //const [loginUser, { isLoading }] = useLoginUserMutation()
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const actualData = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-    if (actualData.email && actualData.password) {
-      console.log(actualData);
-      document.getElementById("loginForm").reset();
-      // setError({ status: true, msg: "Login successfull", type: "success" });
-      navigate("/customer/dashboard");
-    } else {
-      setError({ status: true, msg: "All fields are required!", type: "error" });
-    }
+
+  const inputHandler = (event) => {
+    setLoginFormData({
+      ...loginFormData,
+      [event.target.name]: event.target.value,
+    });
   };
+
+  // console.log(loginFormData);
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("username", loginFormData.username);
+    formData.append("password", loginFormData.password);
+    // console.log(formData);
+    // console.log(loginFormData.username, loginFormData.password);
+    // for (const value of formData.values()) {
+    //   console.log(value);
+
+    axios
+      .post(baseUrl + "customer/login/", formData)
+      .then(function (response) {
+        // console.log(response);
+        if (response.data.bool === false) {
+          setFormError(true);
+          setErrorMsg(response.data.msg);
+        } else {
+          console.log(response.data);
+          localStorage.setItem("customer_login", true);
+          localStorage.setItem("customer_username", response.data.user);
+          // localStorage.setItem("customer_id", response.data.user);
+          setFormError(false);
+          setErrorMsg("");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const checkCustomer = localStorage.getItem("customer_login");
+  if (checkCustomer) {
+    window.location.href='/customer/dashboard'
+    // navigate("/customer/dashboard");
+  }
+
+  const buttonEnable =
+    loginFormData.username !== "" && loginFormData.password !== "";
+
   return (
     <div className="h-screen flex flex-col items-center">
       <Link to="/">
@@ -44,43 +80,36 @@ function Login() {
         <form
           className="max-w-[400px] w-full mx-auto bg-white p-4"
           id="loginForm"
-          onSubmit={handleSubmit}
+          onSubmit={submitHandler}
         >
           <h2 className="text-2xl font-bold pb-4">Sign In</h2>
           <div className="flex flex-col py-2">
-            <label>Email</label>
-            <input className="border p-2" type="email" name="email" />
+            <label htmlFor="username">Username</label>
+            <input
+              className="border p-2"
+              type="text"
+              name="username"
+              value={loginFormData.username}
+              onChange={inputHandler}
+              id="username"
+            />
           </div>
           <div className="flex flex-col py-2">
-            <label>Password</label>
-            <input className="border p-2" type="password" name="password" />
+            <label htmlFor="password">Password</label>
+            <input
+              className="border p-2"
+              type="password"
+              name="password"
+              value={loginFormData.password}
+              onChange={inputHandler}
+              id="password"
+            />
           </div>
-          {error.status ? (
-            <div
-              class="mb-3 text-base text-red-700 inline-flex items-center w-full"
-              role="alert"
-            >
-              <svg
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="info-circle"
-                class="w-4 h-4 mr-2 fill-current"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                ></path>
-              </svg>
-              {error.msg}
-            </div>
-          ) : (
-            ""
-          )}
-          <button className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white">
+          {formError && <p className="text-red-700">{errorMsg}</p>}
+          <button
+            disabled={!buttonEnable}
+            className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white"
+          >
             Sign in
           </button>
           <p className="text-center">New Customer?</p>

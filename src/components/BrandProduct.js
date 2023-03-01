@@ -53,8 +53,9 @@ function BrandProduct() {
             products.map((product) => (
               <div key={product.id} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/5 p-2">
                 <div className="border rounded-md hover:shadow-lg">
+                {/* <Link to={`/${maincategory_slug}/${category_slug}/${subcategory_slug}/${product.slug}`}> */}
                   {/* <Link to={`/products/${product.slug}`}> */}
-                  <Link>
+                  <Link to={`/products/${product.slug}/${product.id}`}>
                     <img
                       src={product.image}
                       alt={product.title}
