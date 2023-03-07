@@ -29,7 +29,7 @@ function Home() {
         return response.json();
       })
       .then((data) => {
-        setMainCategory(data.data);
+        setMainCategory(data);
         setLoading(false);
       })
       .catch((error) => {

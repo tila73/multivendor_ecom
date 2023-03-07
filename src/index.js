@@ -6,6 +6,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserContext } from "./Context";
 
+// Shopping cart
+import { Provider } from "react-redux";
+import { store } from "./components/State/Store";
+
 const checkCustomer = localStorage.getItem("customer_login");
 // if(checkCustomer==true){
 //   const userLoggedIn = true;
@@ -16,7 +20,9 @@ root.render(
   <React.StrictMode>
     <Router>
       <UserContext.Provider value={checkCustomer}>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </UserContext.Provider>
     </Router>
   </React.StrictMode>

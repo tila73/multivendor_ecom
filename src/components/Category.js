@@ -55,21 +55,26 @@ function CategoryPage() {
             {category.main_category_name} {category.name}
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 p-2">
-            {subcategories.map((subcategory) => (
-              <div
-                key={subcategory.id}
-                className="bg-white p-5 shadow-lg rounded-lg flex flex-col items-center"
-              >
-                <Link to={`/${maincategory_slug}/${category.slug}/${subcategory.slug}`}>
-                  <img
-                    src={`http://127.0.0.1:8000${subcategory.image}`}
-                    className="w-40 h-40 mb-5"
-                    alt={subcategory.name}
-                  />
-                  <h5 className="text-lg font-bold">{subcategory.name}</h5>
-                </Link>
-              </div>
-            ))}
+            {/* {subcategories.map((subcategory) => ( */}
+            {subcategories &&
+              subcategories.length > 0 &&
+              subcategories.map((subcategory) => (
+                <div
+                  key={subcategory.id}
+                  className="bg-white p-5 shadow-lg rounded-lg flex flex-col items-center"
+                >
+                  <Link
+                    to={`/${maincategory_slug}/${category.slug}/${subcategory.slug}`}
+                  >
+                    <img
+                      src={`http://127.0.0.1:8000${subcategory.image}`}
+                      className="w-40 h-40 mb-5"
+                      alt={subcategory.name}
+                    />
+                    <h5 className="text-lg font-bold">{subcategory.name}</h5>
+                  </Link>
+                </div>
+              ))}
           </div>
           <p className="p-2 text-lg">Results</p>
           <div className="flex flex-wrap">

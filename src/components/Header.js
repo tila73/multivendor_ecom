@@ -2,19 +2,28 @@ import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.svg";
 import {
   MagnifyingGlassIcon,
-  ShoppingCartIcon,
+  // ShoppingCartIcon,
   UserCircleIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+// import { RiAccountCircleLine } from 'react-icons/ri';
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext, CartContext } from "../Context";
+import { UserContext } from "../Context";
+import { open } from "./State/Slice/CheckOutSlice";
+import { useDispatch, useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
+
+// import { UserContext, CartContext } from "../Context";
 
 function Header() {
+  const dispatch = useDispatch();
+  const { amount } = useSelector((state) => state.cart);
   const userContext = useContext(UserContext);
-  console.log(userContext) //comment this later
-  const {cartItem, setCartItem}=useContext(CartContext);
-  
+  console.log(userContext); //comment this later
+  // const {cartItem, setCartItem}=useContext(CartContext);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const handleClick = () => {
     setDropdownOpen(!dropdownOpen);
@@ -69,10 +78,11 @@ function Header() {
               onClick={handleClick}
             >
               <div className="flex items-center">
-                <UserCircleIcon className="h-7" />
+                <UserCircleIcon className="h-8" />
+                {/* <RiAccountCircleLine className="text-3xl"/> */}
                 <ChevronDownIcon className="h-5" />
               </div>
-              <a className="hidden md:inline">Account</a>
+              {/* <Link className="hidden md:inline">Account</Link> */}
               {dropdownOpen && (
                 <div className="bg-white rounded-lg shadow-md py-2">
                   {userContext !== "true" && (
@@ -86,19 +96,19 @@ function Header() {
                     </>
                   )}
                   {userContext === "true" && (
-                      <>
-                        {/* <hr className="border-gray-300 my-1" /> */}
-                        <Link
-                          to="/customer/dashboard"
-                          className="block px-4 py-2"
-                        >
-                          Dashboard
-                        </Link>
-                        <Link to="/customer/logout" className="block px-4 py-2">
-                          Sign out
-                        </Link>
-                      </>
-                    )}
+                    <>
+                      {/* <hr className="border-gray-300 my-1" /> */}
+                      <Link
+                        to="/customer/dashboard"
+                        className="block px-4 py-2"
+                      >
+                        Dashboard
+                      </Link>
+                      <Link to="/customer/logout" className="block px-4 py-2">
+                        Sign out
+                      </Link>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -114,10 +124,20 @@ function Header() {
             </div>
             </Link> */}
 
-            <Link to="/cart">
+            {/* Before */}
+            {/* <Link to="/cart">
               <ShoppingCartIcon className="h-18" />
               <a className="hidden md:inline">Cart</a>
-            </Link>
+            </Link> */}
+
+            <div className="relative" onClick={() => dispatch(open())}>
+              {/* <Link to="/cart"> */}
+              <AiOutlineShoppingCart className="text-3xl" />
+              <div className="absolute w-4 h-4 rounded-full z-10 right-[-3px] bottom-[-3px] flex items-center justify-center text-[10px] bg-black text-white">
+                {amount}
+              </div>
+              {/* </Link> */}
+            </div>
           </div>
         </div>
 
@@ -127,14 +147,12 @@ function Header() {
             Shop
             <ChevronDownIcon className="h-4" />
           </Link>
-          <Link to="/brands" className="cursor-pointer">
-            Brands
-          </Link>
+          <Link to="/brands">Brands</Link>
           <Link to="/sell">Sell</Link>
-          <a className="cursor-pointer  flex items-center">
+          <Link className="flex items-center">
             Customer Service
             <ChevronDownIcon className="h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </header>

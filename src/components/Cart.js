@@ -1,97 +1,58 @@
-import React from 'react'
-import { useState } from "react";
-import Footer from "./Footer";
-import Header from "./Header";
-import reactlogo from "../logo.svg";
+import React from "react";
+import { HiChevronLeft, HiTrash } from "react-icons/hi";
+import CartItems from "./CartItem";
+import { open } from "./State/Slice/CheckOutSlice";
+import { clear } from "./State/Slice/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-function Cart() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      image: reactlogo,
-      description: "Product 1 description",
-      price: 10,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      image: reactlogo,
-      description: "Product 2 description",
-      price: 20,
-      quantity: 2,
-    },
-  ]);
-  const removeCartItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
-
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => {
-      return total + item.price * item.quantity;
-    }, 0);
-  };
+function Checkout() {
+  const dispatch = useDispatch();
+  const { cartItems, total, amount } = useSelector((state) => state.cart);
   return (
-    <div>
-      <Header />
-      <div className="flex flex-wrap justify-center bg-gray-100 p-6">
-        <div className="w-full md:w-2/3 lg:w-2/3 px-4 shadow-lg rounded-lg bg-white">
-          <h2 className="text-2xl font-bold mb-2">Shopping cart</h2>
-          <div className="overflow-hidden p-4">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center border-b border-gray-200 py-3"
-              >
-                <img
-                  src={item.image}
-                  alt={item.description} 
-                  className="w-20 h-20 object-cover rounded"
-                />
-                <div className="ml-4 flex-1">
-                  <h3 className="text-gray-900 font-semibold">
-                    {item.description}
-                  </h3>
-                  <p className="text-gray-600">${item.price}</p>
-                </div>
-                <div className="flex items-center mt-4">
-                
-
-                
-                  <input
-                    type="number"
-                    min="1"
-                    value={item.quantity}
-                    className="w-16 text-center border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                  />
-                  <button
-                    onClick={() => removeCartItem(item.id)}
-                    className="ml-4 text-red-500"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            ))}
+    <div className="bg-transparentBlack fixed z-30 top-0 left-0 w-full h-screen">
+      <div className="h-full bg-gray-100 sm:w-[40rem] md:w-[50rem] min-w-[15rem] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={() => dispatch(open())}
+            >
+              <HiChevronLeft />
+              <span className="uppercase text-[0.95rem] select-none">
+                Continue Shopping
+              </span>
+            </div>
+            <div>Shopping Cart ({amount})</div>
           </div>
-        </div>
-        <div className="w-full md:w-2/3 lg:w-1/3 px-4 shadow-md rounded-lg bg-white">
-          <h2 className="text-2xl font-bold mb-2">Subtotal</h2>
-          <div className="overflow-hidden p-4">
-            <div className="flex items-center py-3">
-              <div className="text-gray-600 flex-1">Subtotal</div>
-              <div className="text-gray-900">${calculateSubtotal()}</div>
-            </div>
-            <div className="flex justify-end pt-4">
-              <button className="bg-blue-500 text-white py-2 px-4 rounded">
-                Proceed to checkout
-              </button>
-            </div>
+          <div className="mt-8">
+            {cartItems.length === 0 ? (
+              <div className="uppercase text-center text-3xl">
+                Your cart is empty
+              </div>
+            ) : (
+              <>
+                {cartItems.map((cartItem) => {
+                  return (
+                    <CartItems key={cartItem.id} cartItem={cartItem} />
+                  );
+                })}
+                <div className="flex justify-between items-center mt-12">
+                  <div>Total Cost: ${total.toFixed(2)}</div>
+                  <HiTrash
+                    className="cursor-pointer text-3xl"
+                    onClick={() => dispatch(clear())}
+                  />
+                </div>
+                <div className="text-center cursor-pointer bg-purple-300 text-lg font-medium p-3 mt-8 hover:bg-purple-500 hover:text-white">
+                  Proceed to Checkout
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
 
-export default Cart;
+export default Checkout;

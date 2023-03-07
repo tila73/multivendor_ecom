@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import axios from "axios";
 
@@ -8,7 +9,7 @@ function Register() {
   // const [formError, setFormError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [registerFormData, setRegisterFormData] = useState({
     first_name: "",

@@ -1,20 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { UserContext, CartContext } from "../Context";
-// import axios from 'axios';
+import { add } from "./State/Slice/CartSlice";
+import { useDispatch } from "react-redux";
 
 function ProductDetail() {
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const { product_slug, product_id } = useParams();
-  const [quantity, setQuantity] = useState(1);
-  const [cartButtonClickStatus, setcartButtonClickStatus] = useState(false);
-  const { cartItem, setCartItem } = useContext(CartContext);
-  // const [isAddedToCart, setIsAddedToCart] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
+  const { product_slug } = useParams();
   // const { maincategory_slug, category_slug, subcategory_slug, product_slug  } = useParams();
 
   useEffect(() => {
@@ -27,7 +23,6 @@ function ProductDetail() {
           setSelectedImage(data.product_images[0].image);
         }
       });
-    checkProductInCart(product_id);
   }, [product_slug]);
   // }, [maincategory_slug, category_slug, subcategory_slug, product_slug]);
 
@@ -38,72 +33,6 @@ function ProductDetail() {
   if (!product) {
     return <div>Loading...</div>;
   }
-
-  function checkProductInCart(product_id) {
-    var previousCart = localStorage.getItem("cartItem");
-    var cartJson = JSON.parse(previousCart);
-    if (cartJson != null) {
-      cartJson.map((cart) => {
-        if (cart !== null && cart.product.id === product_id) {
-          setcartButtonClickStatus(true);
-        }
-      });
-    }
-  }
-
-  const cartAddButtonHandler = () => {
-    var previousCart = localStorage.getItem("cartItem");
-    var cartJson = JSON.parse(previousCart);
-    var cartItem = {
-      product: {
-        id: product.id,
-        title: product.title,
-      },
-      user: {
-        id: 1,
-      },
-    };
-    // var cartItem = [
-    //   {
-    //     product: {
-    //       id: product.id,
-    //       title: product.title,
-    //     },
-    //     user: {
-    //       id: 1,
-    //     },
-    //   },
-    // ];
-    if (cartJson != null) {
-      cartJson.push(cartItem);
-      var cartString = JSON.stringify(cartJson);
-      localStorage.setItem("cartItem", cartString);
-      setCartItem(cartJson);
-    } else {
-      var newCartList = [];
-      newCartList.push(cartItem);
-      var cartString = JSON.stringify(newCartList);
-      // cartString = JSON.stringify(newCartList);
-      localStorage.setItem("cartItem", cartString);
-    }
-    setcartButtonClickStatus(true);
-  };
-
-  const cartRemoveButtonHandler = () => {
-    // localStorage.removeItem("cartItem");
-    var previousCart = localStorage.getItem("cartItem");
-    var cartJson = JSON.parse(previousCart);
-    cartJson.map((cart, index) => {
-      if (cart !== null && cart.product.id === product.id) {
-        // delete cartJson[index];
-        cartJson.splice(index, 1);
-      }
-    });
-    var cartString = JSON.stringify(cartJson);
-    localStorage.setItem("cartItem", cartString);
-    setcartButtonClickStatus(false);
-    setCartItem(cartJson);
-  };
 
   return (
     <div className="min-h-screen">
@@ -166,37 +95,17 @@ function ProductDetail() {
               </Link>
             </p>
             <p className="text-xl mt-6 font-bold">Rs. {product.price}</p>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-            />
-            {!cartButtonClickStatus && (
-              <button
-                type="button"
-                className="bg-blue-500 text-white p-3 mt-6"
-                onClick={cartAddButtonHandler}
-              >
-                Add to Cart
-              </button>
-            )}
-            {cartButtonClickStatus && (
-              <button
-                type="button"
-                className="bg-red-500 text-white p-3 mt-6"
-                onClick={cartRemoveButtonHandler}
-              >
-                Remove from cart
-              </button>
-            )}
-            <div className="mt-6">
+            <button className="bg-blue-500 text-white p-3 mt-6" onClick={() => dispatch(add(product))}>
+              Add to Cart
+            </button>
+            {/* <div className="mt-6">
               <h2 className="text-lg font-bold">Customer Reviews:</h2>
               {product.product_ratings.map((rating, index) => (
                 <p key={index} className="mt-2 text-base">
                   {rating.comment}
                 </p>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
