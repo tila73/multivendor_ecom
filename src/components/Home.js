@@ -51,9 +51,9 @@ function Home() {
   return (
     <div>
       <Header />
-      <a href="#products-by-pet">
+      <Link to="/shop">
         <img className="w-full" src={banner} alt="pets" />
-      </a>
+      </Link>
       {/* <div><Link to="/dog" href="#">Dog</Link></div> */}
       <div className="my-8 mx-20">
         <h1 className="text-2xl font-bold">Best Selling Products</h1>
@@ -118,7 +118,9 @@ function Home() {
 
       {/* Shop Products By Pet */}
       <div className="my-10">
-        <h1 className="text-2xl font-bold ml-20" id="products-by-pet">Shop Products By Pet</h1>
+        <h1 className="text-2xl font-bold ml-20" id="products-by-pet">
+          Shop Products By Pet
+        </h1>
         <div className="relative flex items-center mx-16">
           {/* <MdChevronLeft
             className="opacity-50 cursor-pointer hover:opacity-100"
@@ -142,8 +144,8 @@ function Home() {
             ) : main_categories.length ? (
               main_categories.map((main_category) => (
                 <SingleMainCategory
-                key={main_category.id}
-                main_category={main_category}
+                  key={main_category.id}
+                  main_category={main_category}
                 />
               ))
             ) : (

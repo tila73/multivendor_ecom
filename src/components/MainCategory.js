@@ -9,7 +9,7 @@ function MainCategoryPage() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/${maincategory_slug}/`)
+    fetch(`http://127.0.0.1:8000/api/main_categories/${maincategory_slug}/`)
       .then((response) => response.json())
       .then((data) => setCategories(data.categories));
   }, [maincategory_slug]);

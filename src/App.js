@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Website
 import Home from "./components/Home";
+import Search from "./components/Search";
 import Shop from "./components/Shop";
 import MainCategory from "./components/MainCategory";
 import Category from "./components/Category";
@@ -13,12 +14,19 @@ import BrandProduct from "./components/BrandProduct";
 import Sell from "./components/Sell";
 import Cart from "./components/Cart";
 // import Cart from "./components/Checkout";
+// import CheckoutPage from "./components/CheckoutPage";
+import LoginCheck from "./components/LoginCheck";
 import OrderSuccess from "./components/OrderSuccess";
 import OrderFailure from "./components/OrderFailure";
+
+// for cart
+import { loadCart } from "./components/State/Slice/CartSlice";
 
 // Customer Panel
 import Register from "./components/Customer/Register";
 import Login from "./components/Customer/Login";
+import CheckoutLogin from "./components/Customer/CheckoutLogin";
+import CheckoutRegister from "./components/Customer/CheckoutRegister";
 import Logout from "./components/Customer/Logout";
 import Dashboard from "./components/Customer/Dashboard";
 import Orders from "./components/Customer/Orders";
@@ -52,9 +60,20 @@ function App() {
   const { isOpen } = useSelector((state) => state.checkout);
   const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
   useEffect(() => {
+    // Retrieve cart data from local storage
+    const savedCartItems = localStorage.getItem("cartItems");
+    if (savedCartItems) {
+      dispatch({ type: "cart/load", payload: JSON.parse(savedCartItems) });
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Save cart data to local storage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
     dispatch(total());
-  }, [cartItems]);
+  }, [cartItems, dispatch]);
 
   return (
     <>
@@ -62,7 +81,12 @@ function App() {
       <Routes>
         {/* Customer routes */}
         <Route path="/customer/register" element={<Register />} />
+        <Route
+          path="/customer/checkout-register"
+          element={<CheckoutRegister />}
+        />
         <Route path="/customer/login" element={<Login />} />
+        <Route path="/customer/checkout-login" element={<CheckoutLogin />} />
         <Route path="/customer/logout" element={<Logout />} />
         <Route path="/customer/dashboard" element={<Dashboard />} />
         <Route path="/customer/orders" element={<Orders />} />
@@ -88,6 +112,7 @@ function App() {
 
         {/* Website routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/search/:searchString" element={<Search />} />
         <Route path="/shop" element={<Shop />} />
         {/* <Route path="/shop/dog" element={<MainCategory />} /> */}
         <Route path="/:maincategory_slug" element={<MainCategory />} />
@@ -111,7 +136,8 @@ function App() {
         {/* <Route path="/cart" element={<Cart />} /> */}
         {/* <Checkout /> */}
         <Route element={<Cart />} />
-        <Route path="/order/success" element={<OrderSuccess />} />
+        {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
+        <Route path="/checkout" element={<LoginCheck />} />
         <Route path="/order/failure" element={<OrderFailure />} />
         <Route path="/add-to-cart" element={<AddToCart />} />
       </Routes>

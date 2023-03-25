@@ -2,28 +2,31 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
-function Product() {
+const baseUrl = "http://127.0.0.1:8000/api";
+
+function Search() {
   const [products, setProducts] = useState([]);
+  const { searchString } = useParams();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/products/")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data.data);
+    try {
+      axios.get(baseUrl + "/search-products/" + searchString).then((res) => {
+        setProducts(res.data.data);
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
-
-  if (!products) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
       <Header />
       <div className="container mx-auto px-5">
         <div className="mb-20">
-          <h4 className="text-xl font-bold mt-4 p-2">All Products</h4>
+          <h4 className="text-xl font-bold mt-4 p-2">Search results for <span className="text-blue-500">{searchString}</span></h4>
           <div className="flex flex-wrap">
             {products.map((product) => (
               <div
@@ -55,4 +58,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default Search;

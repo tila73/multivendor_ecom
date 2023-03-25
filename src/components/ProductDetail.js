@@ -34,6 +34,13 @@ function ProductDetail() {
     return <div>Loading...</div>;
   }
 
+  let listItems;
+  if (product.detail.includes("<ul>")) {
+    listItems = product.detail.match(/<li>(.*?)<\/li>/g) || [];
+  } else {
+    listItems = product.detail.split("\r\n").filter((item) => item !== "");
+  }
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -63,7 +70,7 @@ function ProductDetail() {
               src={selectedImage}
               alt="Product"
               className="m-auto"
-              style={{ height: "400px", width: "400px" }}
+              style={{ height: "400px", width: "300px" }}
             />
             <div className="flex mt-4 justify-center">
               {product.product_images.map((img, index) => (
@@ -84,20 +91,33 @@ function ProductDetail() {
           </div>
           <div className="w-full md:w-2/3 p-6">
             <h1 className="text-2xl font-bold">{product.title}</h1>
-            <p className="text-base mt-6">{product.detail}</p>
-            <p className="text-base mt-6">
+            <p className="text-base mt-3">
               By{" "}
               <Link
-                to=""
-                className="text-blue-700 hover:text-blue-900 hover:underline"
+                to={`/brands/${product.brand.slug}`}
+                className="text-blue-700 hover:text-blue-900 hover:underline font-semibold"
               >
                 {product.brand.name}
               </Link>
             </p>
-            <p className="text-xl mt-6 font-bold">Rs. {product.price}</p>
-            <button className="bg-blue-500 text-white p-3 mt-6" onClick={() => dispatch(add(product))}>
+            <div className="mt-3">
+              Price:{" "}
+              <span className="text-xl font-bold">Rs. {product.price}</span>
+            </div>
+            <button
+              className="bg-blue-500 text-white p-3 mt-6"
+              onClick={() => dispatch(add(product))}
+            >
               Add to Cart
             </button>
+            <h2 className="text-lg font-bold mt-6">Product description</h2>
+            <ul className="list-disc ml-5">
+              {listItems.map((item, index) => (
+                <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+              ))}
+            </ul>
+            {/* <p className="text-base mt-4">{product.detail}</p>
+
             {/* <div className="mt-6">
               <h2 className="text-lg font-bold">Customer Reviews:</h2>
               {product.product_ratings.map((rating, index) => (

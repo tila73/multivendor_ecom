@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import sellerlogo from "../../assets/sellerlogo.svg";
 
 function SellerLogin() {
+  const baseUrl = "http://127.0.0.1:8000/api/";
+  const [formError, setFormError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const [loginFormData, setLoginFormData] = useState({
     username: "",
     password: "",
@@ -15,16 +20,42 @@ function SellerLogin() {
     });
   };
 
-  // console.log(loginFormData);
-
   const submitHandler = (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('username', loginFormData.username);
-    formData.append('password', loginFormData.password);
+    formData.append("username", loginFormData.username);
+    formData.append("password", loginFormData.password);
     console.log(formData);
     // console.dir(formData)
+
+    axios
+      .post(baseUrl + "seller/login/", formData)
+      .then(function (response) {
+        // console.log(response);
+        if (response.data.bool === false) {
+          setFormError(true);
+          setErrorMsg(response.data.msg);
+        } else {
+          console.log(response.data);
+          localStorage.setItem("seller_login", true);
+          localStorage.setItem("seller_id", response.data.id);
+          localStorage.setItem("seller_username", response.data.user);
+          setFormError(false);
+          setErrorMsg("");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
+
+  const checkSeller = localStorage.getItem("seller_login");
+  if (checkSeller) {
+    window.location.href='/seller/dashboard'
+  }
+
+  const buttonEnable =
+    loginFormData.username !== "" && loginFormData.password !== "";
 
   return (
     <div className="h-screen flex flex-col items-center">
@@ -49,23 +80,42 @@ function SellerLogin() {
       >
         <form
           className="max-w-[400px] w-full mx-auto bg-white p-4"
-          id="loginForm" onSubmit={submitHandler}
+          id="loginForm"
+          onSubmit={submitHandler}
         >
           <h2 className="text-xl font-medium pb-4">
             Get started selling on Pampered Pets
           </h2>
           <div className="flex flex-col py-2">
             <label>Username</label>
-            <input className="border p-2" type="text" name="username" value={loginFormData.username} onChange={inputHandler} />
+            <input
+              className="border p-2"
+              type="text"
+              name="username"
+              value={loginFormData.username}
+              onChange={inputHandler}
+              id="username"
+            />
           </div>
           <div className="flex flex-col py-2">
             <label>Password</label>
-            <input className="border p-2" type="password" name="password" value={loginFormData.password} onChange={inputHandler} />
+            <input
+              className="border p-2"
+              type="password"
+              name="password"
+              value={loginFormData.password}
+              onChange={inputHandler}
+              id="password"
+            />
           </div>
           {/* <Link to="/seller/dashboard"> */}
-            <button className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white">
-              Sign in
-            </button>
+          {formError && <p className="text-red-700">{errorMsg}</p>}
+          <button
+            disabled={!buttonEnable}
+            className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white"
+          >
+            Sign in
+          </button>
           {/* </Link> */}
           <p className="text-center">New to Pampered Pets?</p>
           <Link to="/seller/register">
