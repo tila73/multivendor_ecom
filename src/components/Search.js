@@ -19,7 +19,7 @@ function Search() {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [searchString]);
 
   return (
     <div>

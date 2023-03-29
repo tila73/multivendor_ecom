@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import SellerHeader from "./SellerHeader";
 import SellerFooter from "./SellerFooter";
 import SellerSidebar from "./SellerSidebar";
-// import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function AddProduct() {
+function EditProduct() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const sellerId = localStorage.getItem("seller_id");
   const baseUrl = "http://127.0.0.1:8000/api/";
@@ -16,6 +16,7 @@ function AddProduct() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
+  const { product_id } = useParams();
 
   const [productData, setProductData] = useState({
     main_category: "",
@@ -27,53 +28,11 @@ function AddProduct() {
     detail: "",
     price: "",
     quantity: "",
+    prev_image: "",
     image: "",
+    prev_product_images: "",
     product_images: [],
   });
-
-  const handleChange = (event) => {
-    if (event.target.name === "category") {
-      setSelectedCategory(event.target.value);
-      setProductData({
-        ...productData,
-        [event.target.name]: event.target.value,
-        subcategory: "", // reset subcategory value
-      });
-    } else if (event.target.name === "subcategory") {
-      setSelectedSubcategory(event.target.value);
-      setProductData({
-        ...productData,
-        [event.target.name]: event.target.value,
-      });
-    } else if (event.target.name === "maincategory") {
-      setSelectedMainCategory(event.target.value);
-      setProductData({
-        ...productData,
-        [event.target.name]: event.target.value,
-        category: "", // reset category and subcategory values
-        subcategory: "",
-      });
-    } else {
-      setProductData({
-        ...productData,
-        [event.target.name]: event.target.value,
-      });
-    }
-  };
-
-  const handleFileChange = (event) => {
-    setProductData({
-      ...productData,
-      [event.target.name]: event.target.files[0],
-    });
-  };
-
-  const handleMultipleFileChange = (event) => {
-    setProductData({
-      ...productData,
-      product_images: event.target.files,
-    });
-  };
 
   // Fetch brands
   useEffect(() => {
@@ -98,9 +57,58 @@ function AddProduct() {
     fetchMainCategories();
   }, []);
 
+  // Fetch current product data and set it to the form fields
   useEffect(() => {
+    try {
+      axios.get(baseUrl + "vendor-product-detail/" + product_id).then((res) => {
+        console.log(res.data);
+        setSelectedMainCategory(res.data.main_category);
+        setProductData({
+          main_category: res.data.main_category,
+          category: res.data.category,
+          subcategory: res.data.subcategory,
+          brand: res.data.brand,
+          title: res.data.title,
+          slug: res.data.slug,
+          detail: res.data.detail,
+          price: res.data.price,
+          quantity: res.data.quantity,
+          prev_image: res.data.image,
+          image: "",
+          prev_product_images: res.data.product_images,
+          product_images: [],
+        });
+
+        const selectedMainCategoryObject = mainCategories.find(
+          (category) => category.id === parseInt(res.data.main_category)
+        );
+        if (selectedMainCategoryObject) {
+          setCategories(selectedMainCategoryObject.categories);
+          setSelectedCategory(res.data.category);
+          const selectedCategoryObject =
+            selectedMainCategoryObject.categories.find(
+              (category) => category.id === parseInt(res.data.category)
+            );
+          if (selectedCategoryObject) {
+            setSubcategories(selectedCategoryObject.subcategories);
+            setSelectedSubcategory(res.data.subcategory);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [product_id, mainCategories]);
+
+  const handleChangeMainCategory = (event) => {
+    const selectedMainCategoryId = event.target.value;
+    setProductData({
+      ...productData,
+      [event.target.name]: selectedMainCategoryId,
+    });
+    setSelectedMainCategory(selectedMainCategoryId);
     const selectedMainCategoryObject = mainCategories.find(
-      (category) => category.id === parseInt(selectedMainCategory)
+      (category) => category.id === parseInt(selectedMainCategoryId)
     );
     if (selectedMainCategoryObject) {
       setCategories(selectedMainCategoryObject.categories);
@@ -108,17 +116,67 @@ function AddProduct() {
       setSubcategories([]);
       setSelectedSubcategory("");
     }
-  }, [mainCategories, selectedMainCategory]);
+  };
 
-  useEffect(() => {
+  const handleCategoryChange = (e) => {
+    const selectedCategoryId = e.target.value;
+    setProductData({
+      ...productData,
+      [e.target.name]: selectedCategoryId,
+    });
+    setSelectedCategory(selectedCategoryId);
+
     const selectedCategoryObject = categories.find(
-      (category) => category.id === parseInt(selectedCategory)
+      (category) => category.id === parseInt(selectedCategoryId)
     );
     if (selectedCategoryObject) {
       setSubcategories(selectedCategoryObject.subcategories);
       setSelectedSubcategory("");
     }
-  }, [categories, selectedCategory]);
+  };
+
+  const handleChange = (event) => {
+    if (event.target.name === "subcategory") {
+      setSelectedSubcategory(event.target.value);
+      setProductData({
+        ...productData,
+        [event.target.name]: event.target.value,
+      });
+    } else {
+      setProductData({
+        ...productData,
+        [event.target.name]: event.target.value,
+      });
+    }
+  };
+
+  const handleFileChange = (event) => {
+    setProductData({
+      ...productData,
+      [event.target.name]: event.target.files[0],
+    });
+  };
+
+  // const handleMultipleFileChange = (event) => {
+  //   setProductData({
+  //     ...productData,
+  //     product_images: event.target.files,
+  //   });
+  // };
+
+  const handleMultipleFileChange = (event) => {
+    const files = event.target.files;
+    const images = Array.from(files);
+    const newProductImages = images.map((image) => ({
+      name: image.name,
+      content: image,
+      type: image.type,
+    }));
+    setProductData({
+      ...productData,
+      product_images: newProductImages,
+    });
+  };
 
   // Clear form after submission
   const resetForm = () => {
@@ -131,67 +189,49 @@ function AddProduct() {
       main_category: "",
       category: "",
       subcategory: "",
+      detail: "",
     });
   };
 
   const formSubmit = async (event) => {
     event.preventDefault();
-    // Check if all required fields are filled
-    const requiredFields = [
-      "main_category",
-      "category",
-      "subcategory",
-      "brand",
-      "title",
-      "slug",
-      "detail",
-      "price",
-      "quantity",
-      "image",
-      "product_images",
-    ];
-    const missingFields = requiredFields.filter((field) => !productData[field]);
-    const errorMessage = document.getElementById("error-message");
-    if (missingFields.length > 0) {
-      errorMessage.innerText = `Please fill all required fields: ${missingFields.join(
-        ", "
-      )}`;
-    } else {
-      const _formData = new FormData();
-      _formData.append("main_category", productData.main_category);
-      _formData.append("category", productData.category);
-      _formData.append("subcategory", productData.subcategory);
-      _formData.append("brand", productData.brand);
-      _formData.append("vendor", sellerId);
-      _formData.append("title", productData.title);
-      _formData.append("slug", productData.slug);
-      _formData.append("detail", productData.detail);
-      _formData.append("price", productData.price);
-      _formData.append("quantity", productData.quantity);
+    const _formData = new FormData();
+    _formData.append("main_category", productData.main_category);
+    _formData.append("category", productData.category);
+    _formData.append("subcategory", productData.subcategory);
+    _formData.append("brand", productData.brand);
+    _formData.append("vendor", sellerId);
+    _formData.append("title", productData.title);
+    _formData.append("slug", productData.slug);
+    _formData.append("detail", productData.detail);
+    _formData.append("price", productData.price);
+    _formData.append("quantity", productData.quantity);
+    if (productData.image !== "") {
       _formData.append("image", productData.image, productData.image.name);
+    }
 
-      const productImages = Array.from(productData.product_images);
-      productImages.forEach((image) => {
-        _formData.append("product_images", image);
+    if (productData.product_images.length > 0) {
+      productData.product_images.forEach((image) => {
+        _formData.append("product_images", image.content, image.name);
       });
+    }
 
-      try {
-        const response = await axios.post(
-          baseUrl + "product-create/",
-          _formData,
-          {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          }
-        );
-        console.log(response.data);
-        resetForm();
-        event.target.reset();
-        setFormSubmitted(true);
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      const response = await axios.put(
+        baseUrl + "vendor-product-detail/" + product_id,
+        _formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      resetForm();
+      event.target.reset();
+      setFormSubmitted(true);
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -200,7 +240,7 @@ function AddProduct() {
       <div className="flex flex-col pt-8 px-12 sm:px-24 pb-20 lg:flex-row">
         <SellerSidebar />
         <div className="p-6 bg-white rounded-lg shadow-xl lg:ml-6 lg:w-full">
-          <h2 className="text-xl font-bold mb-4">Add Product</h2>
+          <h2 className="text-xl font-bold mb-4">Edit Product Information</h2>
           <form onSubmit={formSubmit}>
             <div className="mb-4">
               <select
@@ -208,10 +248,7 @@ function AddProduct() {
                 name="main_category"
                 id="main_category"
                 value={selectedMainCategory}
-                onChange={(event) => {
-                  setSelectedMainCategory(event.target.value);
-                  handleChange(event);
-                }}
+                onChange={handleChangeMainCategory}
               >
                 <option value="">Add Product For</option>
                 {mainCategories.map((category) => (
@@ -231,10 +268,7 @@ function AddProduct() {
                 name="category"
                 id="category"
                 value={selectedCategory}
-                onChange={(event) => {
-                  setSelectedCategory(event.target.value);
-                  handleChange(event);
-                }}
+                onChange={handleCategoryChange}
                 disabled={!selectedMainCategory}
               >
                 <option value="">Select Category</option>
@@ -255,10 +289,7 @@ function AddProduct() {
                 name="subcategory"
                 id="subcategory"
                 value={selectedSubcategory}
-                onChange={(event) => {
-                  setSelectedSubcategory(event.target.value);
-                  handleChange(event);
-                }}
+                onChange={handleChange}
                 disabled={!selectedCategory}
               >
                 <option value="">Select Subcategory</option>
@@ -279,6 +310,7 @@ function AddProduct() {
               <select
                 className="border border-gray-400 p-2 w-full"
                 name="brand"
+                value={productData.brand}
                 onChange={handleChange}
               >
                 <option value="">Select Product Brand</option>
@@ -301,6 +333,7 @@ function AddProduct() {
                 className="border border-gray-400 p-2 w-full"
                 id="title"
                 name="title"
+                value={productData.title}
                 onChange={handleChange}
               />
             </div>
@@ -316,6 +349,7 @@ function AddProduct() {
                 className="border border-gray-400 p-2 w-full"
                 id="slug"
                 name="slug"
+                value={productData.slug}
                 onChange={handleChange}
               />
             </div>
@@ -331,6 +365,7 @@ function AddProduct() {
                 rows={6}
                 id="detail"
                 name="detail"
+                value={productData.detail}
                 onChange={handleChange}
               ></textarea>
             </div>
@@ -346,6 +381,7 @@ function AddProduct() {
                 className="border border-gray-400 p-2 w-full"
                 id="price"
                 name="price"
+                value={productData.price}
                 onChange={handleChange}
               />
             </div>
@@ -361,6 +397,7 @@ function AddProduct() {
                 className="border border-gray-400 p-2 w-full"
                 id="quantity"
                 name="quantity"
+                value={productData.quantity}
                 onChange={handleChange}
               />
             </div>
@@ -378,10 +415,18 @@ function AddProduct() {
                 name="image"
                 onChange={handleFileChange}
               />
+              <p className="font-medium my-4">Previous Image:</p>
+              {productData.prev_image && (
+                <img
+                  src={productData.prev_image}
+                  className="w-32"
+                  alt="Product"
+                />
+              )}
             </div>
             <div className="mb-4">
               <label
-                className="block text-gray-700 font-medium mb-2"
+                className="block text-gray-700 font-medium mt-6 mb-2"
                 htmlFor="product_images"
               >
                 Product Images (Multiple)
@@ -394,18 +439,29 @@ function AddProduct() {
                 onChange={handleMultipleFileChange}
                 multiple
               />
+              <p className="font-medium mt-2">Previous Images:</p>
+              <div className="flex">
+                {productData.prev_product_images &&
+                  productData.prev_product_images.map((image) => (
+                    <img
+                      src={image.image}
+                      key={image.id}
+                      className="mt-4 w-32 mr-4"
+                      alt="Product"
+                    />
+                  ))}
+              </div>
             </div>
             {formSubmitted && (
               <p className="text-green-600 text-lg pb-2 font-semibold">
-                Product added successfully!
+                Product updated successfully!
               </p>
             )}
-            <div className="text-red-600 text-lg pb-2 font-semibold" id="error-message"></div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
               type="submit"
             >
-              Add Product
+              Update Product
             </button>
           </form>
         </div>
@@ -415,4 +471,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default EditProduct;

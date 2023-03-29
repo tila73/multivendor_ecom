@@ -42,6 +42,8 @@ import SellerLogin from "./components/Seller/SellerLogin";
 import SellerDashboard from "./components/Seller/SellerDashboard";
 import SellerProducts from "./components/Seller/SellerProducts";
 import AddProduct from "./components/Seller/AddProduct";
+import EditProduct from "./components/Seller/EditProduct";
+import ViewProduct from "./components/Seller/ViewProduct";
 import SellerOrders from "./components/Seller/SellerOrders";
 import Customers from "./components/Seller/Customers";
 import SellerProfile from "./components/Seller/SellerProfile";
@@ -102,6 +104,8 @@ function App() {
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         <Route path="/seller/products" element={<SellerProducts />} />
         <Route path="/seller/add-product" element={<AddProduct />} />
+        <Route path="/seller/view-product/:product_id" element={<ViewProduct />} />
+        <Route path="/seller/edit-product/:product_id" element={<EditProduct />} />
         <Route path="/seller/orders" element={<SellerOrders />} />
         <Route path="/seller/customers" element={<Customers />} />
         <Route path="/seller/profile" element={<SellerProfile />} />
