@@ -16,8 +16,8 @@ import Cart from "./components/Cart";
 // import Cart from "./components/Checkout";
 // import CheckoutPage from "./components/CheckoutPage";
 import LoginCheck from "./components/LoginCheck";
-import OrderSuccess from "./components/OrderSuccess";
-import OrderFailure from "./components/OrderFailure";
+// import OrderSuccess from "./components/OrderSuccess";
+// import OrderFailure from "./components/OrderFailure";
 
 // for cart
 import { loadCart } from "./components/State/Slice/CartSlice";
@@ -35,10 +35,12 @@ import Profile from "./components/Customer/Profile";
 import ChangePassword from "./components/Customer/ChangePassword";
 import AddressList from "./components/Customer/AddressList";
 import AddAddress from "./components/Customer/AddAddress";
+import EditAddress from "./components/Customer/EditAddress";
 
 // Seller Panel
 import SellerRegister from "./components/Seller/SellerRegister";
 import SellerLogin from "./components/Seller/SellerLogin";
+import SellerLogout from "./components/Seller/SellerLogout";
 import SellerDashboard from "./components/Seller/SellerDashboard";
 import SellerProducts from "./components/Seller/SellerProducts";
 import AddProduct from "./components/Seller/AddProduct";
@@ -97,9 +99,11 @@ function App() {
         <Route path="/customer/change-password" element={<ChangePassword />} />
         <Route path="/customer/addresses" element={<AddressList />} />
         <Route path="/customer/add-address" element={<AddAddress />} />
+        <Route path="/customer/edit-address/:address_id" element={<EditAddress />} />
 
         {/* Seller routes */}
         <Route path="/seller/login" element={<SellerLogin />} />
+        <Route path="/seller/logout" element={<SellerLogout />} />
         <Route path="/seller/register" element={<SellerRegister />} />
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         <Route path="/seller/products" element={<SellerProducts />} />
@@ -142,7 +146,7 @@ function App() {
         <Route element={<Cart />} />
         {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
         <Route path="/checkout" element={<LoginCheck />} />
-        <Route path="/order/failure" element={<OrderFailure />} />
+        {/* <Route path="/order/failure" element={<OrderFailure />} /> */}
         <Route path="/add-to-cart" element={<AddToCart />} />
       </Routes>
     </>

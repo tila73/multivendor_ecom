@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SellerSidebar from "./SellerSidebar";
 import SellerHeader from "./SellerHeader";
 import SellerFooter from "./SellerFooter";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { FiEdit } from "react-icons/fi";
 // import { BsEyeFill } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
 import { FaTrashAlt } from "react-icons/fa";
 
 function SellerDashboard() {

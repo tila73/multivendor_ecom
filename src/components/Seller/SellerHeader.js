@@ -11,7 +11,7 @@ function SellerHeader() {
           alt="seller central logo"
           className="w-48 sm:w-64 h-auto"
         />
-        <Link to="/seller/login" className="text-xs sm:text-base font-bold">
+        <Link to="/seller/logout" className="text-xs sm:text-base font-bold">
           Sign Out
         </Link>
       </div>

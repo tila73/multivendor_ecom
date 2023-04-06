@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../../assets/logo.svg";
 
@@ -8,7 +8,6 @@ function Login() {
   const baseUrl = "http://127.0.0.1:8000/api/";
   const [formError, setFormError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  // const navigate = useNavigate();
 
   const [loginFormData, setLoginFormData] = useState({
     username: "",
@@ -45,7 +44,7 @@ function Login() {
           console.log(response.data);
           localStorage.setItem("customer_login", true);
           localStorage.setItem("customer_username", response.data.user);
-          // localStorage.setItem("customer_id", response.data.user);
+          localStorage.setItem("customer_id", response.data.id);
           setFormError(false);
           setErrorMsg("");
         }
@@ -57,8 +56,7 @@ function Login() {
 
   const checkCustomer = localStorage.getItem("customer_login");
   if (checkCustomer) {
-    window.location.href='/customer/dashboard'
-    // navigate("/customer/dashboard");
+    window.location.href = "/customer/dashboard";
   }
 
   const buttonEnable =
@@ -85,7 +83,7 @@ function Login() {
         >
           <h2 className="text-2xl font-bold pb-4">Sign In</h2>
           <div className="flex flex-col py-2">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username" className="mb-2">Username</label>
             <input
               className="border p-2"
               type="text"
@@ -96,7 +94,7 @@ function Login() {
             />
           </div>
           <div className="flex flex-col py-2">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password" className="mb-2">Password</label>
             <input
               className="border p-2"
               type="password"
@@ -109,7 +107,11 @@ function Login() {
           {formError && <p className="text-red-700">{errorMsg}</p>}
           <button
             disabled={!buttonEnable}
-            className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white"
+            className={`border w-full my-4 py-2 ${
+              buttonEnable
+                ? "bg-purple-400 hover:bg-purple-500 hover:text-white"
+                : "opacity-60 cursor-not-allowed bg-purple-400"
+            }`}
           >
             Sign in
           </button>

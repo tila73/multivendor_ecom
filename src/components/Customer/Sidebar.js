@@ -17,11 +17,17 @@ function Sidebar() {
         Orders
       </Link>
       <Link
+        to="/customer/addresses"
+        className="block px-6 py-2 border border-gray-200 w-full hover:bg-gray-100 hover:text-gray-700"
+      >
+        Addresses
+      </Link>
+      {/* <Link
         to="/customer/whishlist"
         className="block px-6 py-2 border border-gray-200 w-full hover:bg-gray-100 hover:text-gray-700"
       >
         Whishlist
-      </Link>
+      </Link> */}
       <Link
         to="/customer/profile"
         className="block px-6 py-2 border border-gray-200 w-full hover:bg-gray-100 hover:text-gray-700"
@@ -33,12 +39,6 @@ function Sidebar() {
         className="block px-6 py-2 border border-gray-200 w-full hover:bg-gray-100 hover:text-gray-700"
       >
         Change Password
-      </Link>
-      <Link
-        to="/customer/addresses"
-        className="block px-6 py-2 border border-gray-200 w-full hover:bg-gray-100 hover:text-gray-700"
-      >
-        Addresses
       </Link>
       <Link
         to="/customer/logout"

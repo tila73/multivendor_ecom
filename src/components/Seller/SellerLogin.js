@@ -26,12 +26,10 @@ function SellerLogin() {
     formData.append("username", loginFormData.username);
     formData.append("password", loginFormData.password);
     console.log(formData);
-    // console.dir(formData)
 
     axios
       .post(baseUrl + "seller/login/", formData)
       .then(function (response) {
-        // console.log(response);
         if (response.data.bool === false) {
           setFormError(true);
           setErrorMsg(response.data.msg);
@@ -51,7 +49,7 @@ function SellerLogin() {
 
   const checkSeller = localStorage.getItem("seller_login");
   if (checkSeller) {
-    window.location.href='/seller/dashboard'
+    window.location.href = "/seller/dashboard";
   }
 
   const buttonEnable =
@@ -86,8 +84,12 @@ function SellerLogin() {
           <h2 className="text-xl font-medium pb-4">
             Get started selling on Pampered Pets
           </h2>
+          {/* <div className="flex">
+            <InformationCircleIcon className="w-6 text-gray-700" />
+            <p className="text-gray-700">&nbsp;All fields are required.</p>
+          </div> */}
           <div className="flex flex-col py-2">
-            <label>Username</label>
+            <label htmlFor="username" className="my-2">Username</label>
             <input
               className="border p-2"
               type="text"
@@ -98,7 +100,7 @@ function SellerLogin() {
             />
           </div>
           <div className="flex flex-col py-2">
-            <label>Password</label>
+            <label htmlFor="password" className="mb-2">Password</label>
             <input
               className="border p-2"
               type="password"
@@ -112,7 +114,11 @@ function SellerLogin() {
           {formError && <p className="text-red-700">{errorMsg}</p>}
           <button
             disabled={!buttonEnable}
-            className="border w-full my-4 py-2 bg-purple-400 hover:bg-purple-500 hover:text-white"
+            className={`border w-full my-4 py-2 ${
+              buttonEnable
+                ? "bg-purple-400 hover:bg-purple-500 hover:text-white"
+                : "opacity-60 cursor-not-allowed bg-purple-400"
+            }`}
           >
             Sign in
           </button>

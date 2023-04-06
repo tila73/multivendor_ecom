@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import CartItems from "./CartItem";
-import { RadioGroup } from "@headlessui/react";
+// import { RadioGroup } from "@headlessui/react";
 import Footer from "./Footer";
 import Header from "./CheckoutHeader";
+import DefaultAddress from "./DefaultAddress";
+import ChangeAddress from "./ChangeAddress";
 
 const baseUrl = "http://127.0.0.1:8000/api/";
 
 const CheckoutPage = () => {
   const customerId = localStorage.getItem("customer_id");
   const { cartItems, total } = useSelector((state) => state.cart);
+  const [showChangeAddress, setShowChangeAddress] = useState(false);
 
   const handleConfirmOrder = () => {
     const formData = new FormData();
@@ -27,23 +30,12 @@ const CheckoutPage = () => {
       });
   };
 
-  const [selectedPayment, setSelectedPayment] = useState("khalti");
-  const [shippingDetails, setShippingDetails] = useState({
-    name: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-  });
+  // const handlePaymentChange = (value) => {
+  //   setSelectedPayment(value);
+  // };
 
-  const handleShippingDetailsChange = (e) => {
-    const { name, value } = e.target;
-    setShippingDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-  };
-
-  const handlePaymentChange = (value) => {
-    setSelectedPayment(value);
+  const handleShowChangeAddress = () => {
+    setShowChangeAddress(true);
   };
 
   return (
@@ -51,66 +43,17 @@ const CheckoutPage = () => {
       <Header />
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mx-10">
         <div className="bg-white p-8 md:col-span-8">
-          <h2 className="text-xl font-medium mb-4">Shipping details</h2>
-          <form>
-            <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="name"
-                value={shippingDetails.name}
-                onChange={handleShippingDetailsChange}
-                placeholder="Name"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                value={shippingDetails.email}
-                onChange={handleShippingDetailsChange}
-                placeholder="Email"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-              <input
-                type="text"
-                name="address"
-                value={shippingDetails.address}
-                onChange={handleShippingDetailsChange}
-                placeholder="Address"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-              <input
-                type="text"
-                name="city"
-                value={shippingDetails.city}
-                onChange={handleShippingDetailsChange}
-                placeholder="City"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-              <input
-                type="text"
-                name="state"
-                value={shippingDetails.state}
-                onChange={handleShippingDetailsChange}
-                placeholder="State"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-              <input
-                type="text"
-                name="zip"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
-                placeholder="Zip"
-                className="border-gray-200 border-2 p-2 rounded-lg w-full"
-                required
-              />
-            </div>
-          </form>
-          <h2 className="text-xl font-medium my-4">Payment</h2>
+          <div className="border border-solid border-glass p-6">
+            <h2 className="text-xl font-medium mb-4">Your Shipping Address</h2>
+            {/* <DefaultAddress />
+            <ChangeAddress /> */}
+            {showChangeAddress ? (
+              <ChangeAddress />
+            ) : (
+              <DefaultAddress onChangeAddressClick={handleShowChangeAddress} />
+            )}
+          </div>
+          {/* <h2 className="text-xl font-medium my-4">Payment</h2>
           <RadioGroup value={selectedPayment} onChange={handlePaymentChange}>
             <RadioGroup.Option value="cash_on_delivery" className="mb-4">
               {({ checked }) => (
@@ -150,7 +93,7 @@ const CheckoutPage = () => {
                 </div>
               )}
             </RadioGroup.Option>
-          </RadioGroup>
+          </RadioGroup> */}
           <div>
             <h2 className="text-xl font-medium my-4">Your Items</h2>
             {cartItems.map((item) => (
