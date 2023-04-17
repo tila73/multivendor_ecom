@@ -5,6 +5,7 @@ import { open } from "./State/Slice/CheckOutSlice";
 import { clear } from "./State/Slice/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -12,6 +13,20 @@ function Cart() {
 
   const handleCheckoutClick = () => {
     dispatch(open());
+  };
+
+  const customerId = localStorage.getItem("customer_id");
+  const clearCart = (customerId) => {
+    const formData = new FormData();
+    formData.append("customer_id", customerId);
+    axios
+      .post("http://127.0.0.1:8000/api/clear_cart/", formData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -44,7 +59,10 @@ function Cart() {
                   <div>Total Cost: Rs. {total.toFixed(2)}</div>
                   <HiTrash
                     className="cursor-pointer text-3xl"
-                    onClick={() => dispatch(clear())}
+                    onClick={() => {
+                      dispatch(clear());
+                      clearCart(customerId);
+                    }}
                   />
                 </div>
                 <Link to="/checkout">

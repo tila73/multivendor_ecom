@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import CheckoutHeader from "../CheckoutHeader";
 
-function CheckoutLogin() {
+function CartLogin() {
   const baseUrl = "http://127.0.0.1:8000/api/";
   const [formError, setFormError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -59,7 +59,7 @@ function CheckoutLogin() {
       <CheckoutHeader />
       <div className="h-screen flex flex-col items-center">
         <h2 className="text-xl font-bold pt-4">
-          Sign In or Register to Checkout
+          Sign In or Register to Add Products to Cart
         </h2>
         <div
           className="border-gray-200 border-solid border-2 mt-5 sm:w-80
@@ -115,4 +115,4 @@ function CheckoutLogin() {
   );
 }
 
-export default CheckoutLogin;
+export default CartLogin;

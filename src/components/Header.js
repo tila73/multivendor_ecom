@@ -179,13 +179,13 @@ function Header() {
             {csdropdownOpen && (
               <div className="absolute bg-white rounded-lg shadow-md py-2 top-8 right-0">
                 <Link
-                  to=""
+                  to="/contact-us"
                   className="block p-2 mx-3 mb-1 text-center rounded-md hover:bg-slate-300"
                 >
                   Contact Us
                 </Link>
                 <Link
-                  to=""
+                  to="/faqs"
                   className="block p-2 mx-3 mb-1 text-center rounded-md hover:bg-slate-300"
                 >
                   FAQ

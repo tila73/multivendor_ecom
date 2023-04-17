@@ -10,16 +10,16 @@ function Footer() {
         <ul>
           <h1 className="mb-1 font-bold">Customer Service</h1>
           <li className="cursor-pointer">
-            <Link>Contact us</Link>
+            <Link to="/contact-us">Contact us</Link>
           </li>
           <li className="cursor-pointer">
-            <Link>FAQs</Link>
+            <Link to="/faqs">FAQs</Link>
           </li>
         </ul>
         <ul>
           <h1 className="mb-1 font-bold">About</h1>
           <li className="cursor-pointer">
-            <Link>About Pampered Pets</Link>
+            <Link to="/about-us">About Pampered Pets</Link>
           </li>
           <li className="cursor-pointer">
             <Link>Privacy Policy</Link>

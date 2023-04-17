@@ -17,6 +17,10 @@ function Home() {
     fetchData("http://127.0.0.1:8000/api/main_categories/");
   }, []);
 
+  useEffect(() => {
+    document.title = "Home";
+  });
+
   function fetchData(baseurl) {
     setLoading(true);
     setError(null);

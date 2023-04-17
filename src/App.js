@@ -14,10 +14,13 @@ import BrandProduct from "./components/BrandProduct";
 import Sell from "./components/Sell";
 import Cart from "./components/Cart";
 // import Cart from "./components/Checkout";
-// import CheckoutPage from "./components/CheckoutPage";
-import LoginCheck from "./components/LoginCheck";
+import CheckoutPage from "./components/CheckoutPage";
 // import OrderSuccess from "./components/OrderSuccess";
 // import OrderFailure from "./components/OrderFailure";
+import Khalti from "./components/Khalti/Khalti";
+import ContactUs from "./components/ContactUs";
+import AboutUs from "./components/About Us";
+import FAQs from "./components/FAQs";
 
 // for cart
 import { loadCart } from "./components/State/Slice/CartSlice";
@@ -25,8 +28,6 @@ import { loadCart } from "./components/State/Slice/CartSlice";
 // Customer Panel
 import Register from "./components/Customer/Register";
 import Login from "./components/Customer/Login";
-import CheckoutLogin from "./components/Customer/CheckoutLogin";
-import CheckoutRegister from "./components/Customer/CheckoutRegister";
 import Logout from "./components/Customer/Logout";
 import Dashboard from "./components/Customer/Dashboard";
 import Orders from "./components/Customer/Orders";
@@ -85,12 +86,12 @@ function App() {
       <Routes>
         {/* Customer routes */}
         <Route path="/customer/register" element={<Register />} />
-        <Route
+        {/* <Route
           path="/customer/checkout-register"
           element={<CheckoutRegister />}
-        />
+        /> */}
         <Route path="/customer/login" element={<Login />} />
-        <Route path="/customer/checkout-login" element={<CheckoutLogin />} />
+        {/* <Route path="/add-to-cart/login" element={<CartLogin />} /> */}
         <Route path="/customer/logout" element={<Logout />} />
         <Route path="/customer/dashboard" element={<Dashboard />} />
         <Route path="/customer/orders" element={<Orders />} />
@@ -99,7 +100,10 @@ function App() {
         <Route path="/customer/change-password" element={<ChangePassword />} />
         <Route path="/customer/addresses" element={<AddressList />} />
         <Route path="/customer/add-address" element={<AddAddress />} />
-        <Route path="/customer/edit-address/:address_id" element={<EditAddress />} />
+        <Route
+          path="/customer/edit-address/:address_id"
+          element={<EditAddress />}
+        />
 
         {/* Seller routes */}
         <Route path="/seller/login" element={<SellerLogin />} />
@@ -108,8 +112,14 @@ function App() {
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         <Route path="/seller/products" element={<SellerProducts />} />
         <Route path="/seller/add-product" element={<AddProduct />} />
-        <Route path="/seller/view-product/:product_id" element={<ViewProduct />} />
-        <Route path="/seller/edit-product/:product_id" element={<EditProduct />} />
+        <Route
+          path="/seller/view-product/:product_id"
+          element={<ViewProduct />}
+        />
+        <Route
+          path="/seller/edit-product/:product_id"
+          element={<EditProduct />}
+        />
         <Route path="/seller/orders" element={<SellerOrders />} />
         <Route path="/seller/customers" element={<Customers />} />
         <Route path="/seller/profile" element={<SellerProfile />} />
@@ -142,12 +152,14 @@ function App() {
         <Route path="/brands/:brand_slug" element={<BrandProduct />} />
         <Route path="/sell" element={<Sell />} />
         {/* <Route path="/cart" element={<Cart />} /> */}
-        {/* <Checkout /> */}
         <Route element={<Cart />} />
-        {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
-        <Route path="/checkout" element={<LoginCheck />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         {/* <Route path="/order/failure" element={<OrderFailure />} /> */}
-        <Route path="/add-to-cart" element={<AddToCart />} />
+        {/* <Route path="/add-to-cart" element={<AddToCart />} /> */}
+        <Route path="/payment" element={<Khalti />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/faqs" element={<FAQs />} />
       </Routes>
     </>
   );

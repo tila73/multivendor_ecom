@@ -5,6 +5,10 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { add } from "./State/Slice/CartSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "../Context";
+import { useNavigate } from 'react-router-dom';
 
 function ProductDetail() {
   const dispatch = useDispatch();
@@ -12,6 +16,8 @@ function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(null);
   const { product_slug } = useParams();
   // const { maincategory_slug, category_slug, subcategory_slug, product_slug  } = useParams();
+  const userContext = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // fetch(`http://127.0.0.1:8000/api/${maincategory_slug}/${category_slug}/${subcategory_slug}/${product_slug}/`)
@@ -40,6 +46,32 @@ function ProductDetail() {
   } else {
     listItems = product.detail.split("\r\n").filter((item) => item !== "");
   }
+
+  const customerId = localStorage.getItem("customer_id");
+  const handleAddToCart = (productId) => {
+    const formData = new FormData();
+    formData.append("product_id", productId);
+    formData.append("quantity", 1);
+    formData.append("customer_id", customerId);
+
+    axios
+      .post("http://127.0.0.1:8000/api/add_to_cart/", formData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleButtonClick = () => {
+    if (userContext) {
+      dispatch(add(product));
+      handleAddToCart(product.id);
+    } else {
+      navigate("/customer/login"); // redirect to login page
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -106,7 +138,11 @@ function ProductDetail() {
             </div>
             <button
               className="bg-blue-500 text-white p-3 mt-6"
-              onClick={() => dispatch(add(product))}
+              onClick={handleButtonClick}
+              // onClick={() => {
+              //   dispatch(add(product));
+              //   handleAddToCart(product.id);
+              // }}
             >
               Add to Cart
             </button>
