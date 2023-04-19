@@ -111,7 +111,8 @@ function SellerLogin() {
             />
           </div>
           {/* <Link to="/seller/dashboard"> */}
-          {formError && <p className="text-red-700">{errorMsg}</p>}
+          {formError && <p className="text-red-700 my-1">{errorMsg}</p>}
+          <p className="text-sm hover:underline mt-2 mb-1">Forgot Password?</p>
           <button
             disabled={!buttonEnable}
             className={`border w-full my-4 py-2 ${

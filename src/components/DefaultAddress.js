@@ -4,7 +4,7 @@ import ChangeAddress from "./ChangeAddress";
 
 const baseUrl = "http://127.0.0.1:8000/api/";
 
-function DefaultAddress({ onChangeAddressClick }) {
+function DefaultAddress({ onChangeAddressClick, setAddressId }) {
   const customerId = localStorage.getItem("customer_id");
   const [addresses, setAddresses] = useState([]);
   const [showAllAddresses, setShowAllAddresses] = useState(false);
@@ -28,6 +28,13 @@ function DefaultAddress({ onChangeAddressClick }) {
     setShowAllAddresses(true);
     onChangeAddressClick();
   };
+
+  useEffect(() => {
+    const defaultAddress = addresses.find((address) => address.default_address);
+    if (defaultAddress) {
+      setAddressId(defaultAddress.id);
+    }
+  }, [addresses, setAddressId]);
 
   return (
     <div>

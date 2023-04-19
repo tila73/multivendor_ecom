@@ -76,7 +76,7 @@ function CategoryPage() {
                 </div>
               ))}
           </div>
-          <p className="p-2 text-lg">Results</p>
+          <p className="p-2 text-lg bold mb-2 mt-4">Results</p>
           <div className="flex flex-wrap">
             {products.map((product) => (
               <div

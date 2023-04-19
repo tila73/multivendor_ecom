@@ -42,14 +42,14 @@ function SellerDashboard() {
             <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center">
               <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Orders
+              <p>0</p>
               </Link>
-              <p>123</p>
             </div>
             <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center">
               <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Customer
+              <p>0</p>
               </Link>
-              <p>30</p>
             </div>
           </div>
         </div>

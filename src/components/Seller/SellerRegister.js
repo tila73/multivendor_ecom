@@ -184,7 +184,7 @@ function SellerRegister() {
           {successMsg && <p className="text-green-600">{successMsg}</p>}
           {errorMsg && <p className="text-red-600">{errorMsg}</p>}
           {!passwordsMatch && (
-            <p className="text-red-600 mb-2">Passwords do not match!!!</p>
+            <p className="text-red-600 mb-2">Password and confirm password do not match!!!</p>
           )}
           <button
             disabled={!buttonEnable}

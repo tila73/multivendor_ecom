@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 // import pets from "../assets/pets.jpg";
 import banner from "../assets/2.png";
 import Footer from "./Footer";
-import reactlogo from "../logo.svg";
 import Header from "./Header";
 import SingleMainCategory from "./SingleMainCategory";
+import PopularCategories from "./PopularCategories";
 
 function Home() {
   const [main_categories, setMainCategory] = useState([]);
+  const [latestProducts, setLatestProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -42,6 +43,13 @@ function Home() {
       });
   }
 
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/latest-products/")
+      .then((response) => response.json())
+      .then((data) => setLatestProducts(data.data))
+      .catch((error) => console.error(error));
+  }, []);
+
   // const slideLeft = () => {
   //   var slider = document.getElementById("slider");
   //   slider.scrollLeft = slider.scrollLeft - 500;
@@ -60,63 +68,21 @@ function Home() {
       </Link>
       {/* <div><Link to="/dog" href="#">Dog</Link></div> */}
       <div className="my-8 mx-20">
-        <h1 className="text-2xl font-bold">Best Selling Products</h1>
+        <h1 className="text-2xl font-bold">Latest Products</h1>
         {/* <div className="flex justify-center gap-x-10 pt-6"> */}
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-center gap-x-10">
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
-          <div>
-            <img src={reactlogo} alt="" className="h-40 w-40 pt-4 mt-3" />
-            <h1 className="mt-3">Product name</h1>
-            <h3>300</h3>
-            {/* <p className='cursor-pointer underline'>Add to cart</p> */}
-            <button className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-              Add to cart
-            </button>
-          </div>
+          {latestProducts.map((product) => (
+            <div key={product.id}>
+              <img
+                src={product.image}
+                alt={product.title}
+                className="h-44 w-40 pt-4 mt-3"
+              />
+              {/* <h1 className="mt-3 text-md font-medium">{product.title}</h1> */}
+              <h1 className="mt-3 text-md font-medium">{product.title.slice(0, 40)}{product.title.length > 20 ? "..." : ""}</h1>
+              <h3 className="text-md text-blue-500 font-medium	">Rs. {product.price}</h3>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -165,81 +131,7 @@ function Home() {
       </div>
 
       {/* Popular Categories */}
-      <div className="my-10 mx-20 justify-center">
-        <h1 className="text-2xl font-bold">Popular Categories</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-center gap-x-10">
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-          <div>
-            <Link>
-              <img
-                src={reactlogo}
-                alt="Dog Food"
-                className="h-40 w-40 pt-4 mt-3"
-              />
-            </Link>
-            <Link>Dog Food</Link>
-          </div>
-        </div>
-      </div>
+      <PopularCategories />
 
       <Footer />
     </div>

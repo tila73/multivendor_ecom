@@ -15,7 +15,7 @@ import Sell from "./components/Sell";
 import Cart from "./components/Cart";
 // import Cart from "./components/Checkout";
 import CheckoutPage from "./components/CheckoutPage";
-// import OrderSuccess from "./components/OrderSuccess";
+import OrderSuccess from "./components/OrderSuccess";
 // import OrderFailure from "./components/OrderFailure";
 import Khalti from "./components/Khalti/Khalti";
 import ContactUs from "./components/ContactUs";
@@ -31,7 +31,6 @@ import Login from "./components/Customer/Login";
 import Logout from "./components/Customer/Logout";
 import Dashboard from "./components/Customer/Dashboard";
 import Orders from "./components/Customer/Orders";
-import Whishlist from "./components/Customer/Whishlist";
 import Profile from "./components/Customer/Profile";
 import ChangePassword from "./components/Customer/ChangePassword";
 import AddressList from "./components/Customer/AddressList";
@@ -95,7 +94,6 @@ function App() {
         <Route path="/customer/logout" element={<Logout />} />
         <Route path="/customer/dashboard" element={<Dashboard />} />
         <Route path="/customer/orders" element={<Orders />} />
-        <Route path="/customer/whishlist" element={<Whishlist />} />
         <Route path="/customer/profile" element={<Profile />} />
         <Route path="/customer/change-password" element={<ChangePassword />} />
         <Route path="/customer/addresses" element={<AddressList />} />
@@ -155,6 +153,7 @@ function App() {
         <Route element={<Cart />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         {/* <Route path="/order/failure" element={<OrderFailure />} /> */}
+        <Route path="/order/success" element={<OrderSuccess />} />
         {/* <Route path="/add-to-cart" element={<AddToCart />} /> */}
         <Route path="/payment" element={<Khalti />} />
         <Route path="/contact-us" element={<ContactUs />} />

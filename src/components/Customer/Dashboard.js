@@ -41,8 +41,8 @@ function Dashboard() {
             <div className="block p-6 rounded-lg shadow-lg w-auto md:w-64 text-center  mr-2">
               <Link className="text-gray-900 text-xl font-medium mb-2 hover:underline">
                 Total Orders
+                <p>2</p>
               </Link>
-              <p>3</p>
             </div>
           </div>
         </div>
